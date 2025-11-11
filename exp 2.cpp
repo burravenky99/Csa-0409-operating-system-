@@ -3,46 +3,20 @@
 #include <unistd.h>
 
 int main() {
-    int sourceFile, destFile;
+    int source, dest;
     char buffer[1024];
-    ssize_t bytesRead, bytesWritten;
+    ssize_t bytes;
 
-    
-    sourceFile = open("source.txt", O_RDONLY);
-    if (sourceFile == -1) {
-        perror("Error opening source file");
-        return 1;
-    }
+    source = open("source.txt", O_RDONLY);
+    dest = open("destination.txt", O_WRONLY | O_CREAT, 0644);
 
-    
-    destFile = open("destination.txt", O_WRONLY | O_CREAT | O_TRUNC, 0644);
-    if (destFile == -1) {
-        perror("Error opening destination file");
-        close(sourceFile);
-        return 1;
-    }
+    while ((bytes = read(source, buffer, sizeof(buffer))) > 0)
+        write(dest, buffer, bytes);
 
-   
-    while ((bytesRead = read(sourceFile, buffer, sizeof(buffer))) > 0) {
-        bytesWritten = write(destFile, buffer, bytesRead);
-        if (bytesWritten != bytesRead) {
-            perror("Error writing to destination file");
-            close(sourceFile);
-            close(destFile);
-            return 1;
-        }
-    }
+    close(source);
+    close(dest);
 
-    if (bytesRead == -1) {
-        perror("Error reading from source file");
-    }
-
-    
-    close(sourceFile);
-    close(destFile);
-
-    printf("File copied successfully.\n");
-
+    printf("File copied successfully!\n");
     return 0;
 }
 
