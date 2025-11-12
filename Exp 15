@@ -1,0 +1,19 @@
+#include <stdio.h>
+#include <string.h>
+
+struct {char d[10], f[10][10]; int n;} dir[5];
+int dc=0;
+
+int main(){
+ int c,i,j; char dn[10], fn[10];
+ while(1){
+  printf("1.Mkdir 2.Create 3.Display 4.Exit: "); scanf("%d",&c);
+  if(c==1){scanf("%s",dir[dc].d); dir[dc++].n=0;}
+  else if(c==2){scanf("%s",dn);
+   for(i=0;i<dc;i++) if(!strcmp(dn,dir[i].d)){
+    scanf("%s",dir[i].f[dir[i].n++]); }}
+  else if(c==3){for(i=0;i<dc;i++){printf("%s:\n",dir[i].d);
+    for(j=0;j<dir[i].n;j++) printf(" %s\n",dir[i].f[j]);}}
+  else return 0;
+ }
+}
